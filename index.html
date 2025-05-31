@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Бюджет-Квест: Онлайн-демо</title>
+ <style>
+    /* Основные глобальные стили */
+    :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3a0ca3;
+        --success-color: #4cc9f0;
+        --danger-color: #f72585;
+        --warning-color: #f8961e;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+    }
+    
+    body {
+    font-family: 'Montserrat', sans-serif;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(67, 97, 238, 0.15) 0%, transparent 25%),
+        radial-gradient(circle at 80% 70%, rgba(240, 84, 131, 0.15) 0%, transparent 25%),
+        linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #2b2d42;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(240, 84, 131, 0.05) 0%, transparent 20%);
+    pointer-events: none;
+    z-index: -1;
+    animation: float 15s infinite ease-in-out alternate;
+}
+
+    h1, h2 {
+        color: var(--secondary-color);
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+
+    h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: transparent;
+    background: linear-gradient(90deg, #4361ee, #3a0ca3, #7209b7, #f72585);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: gradient 8s ease infinite;
+    text-shadow: 0 0 10px rgba(67, 97, 238, 0.3);
+    position: relative;
+    display: inline-block;
+}
+h1::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 4px;
+    background: linear-gradient(90deg, #4361ee, #f72585);
+    border-radius: 2px;
+    animation: gradient 8s ease infinite, pulse 2s ease infinite;
+}
+
+    h2 {
+        font-size: 1.8rem;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+        display: inline-block;
+    }
+
+    /* Стили для этапов */
+    .stage {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+    transform-style: preserve-3d;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.stage::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, transparent 50%);
+    z-index: -1;
+}
+
+.stage:hover {
+    transform: translateY(-5px) rotateX(1deg) rotateY(1deg);
+    box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+}
+
+    /* Стили для вопросов */
+    .question {
+        background-color: rgba(248, 249, 250, 0.8);
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    /* Стили для кнопок */
+    button {
+    margin: 10px;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    color: white;
+    box-shadow: 
+        0 5px 15px rgba(67, 97, 238, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+        0 0 0 2px rgba(0, 0, 0, 0.05) inset;
+    transform: perspective(500px) translateZ(0);
+}
+
+button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.5s ease;
+}
+
+button:hover {
+    transform: perspective(500px) translateZ(20px);
+    box-shadow: 
+        0 8px 25px rgba(67, 97, 238, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+        0 0 0 2px rgba(0, 0, 0, 0.1) inset;
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:active {
+    transform: perspective(500px) translateZ(10px) scale(0.98);
+    box-shadow: 
+        0 3px 10px rgba(67, 97, 238, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+        0 0 0 2px rgba(0, 0, 0, 0.05) inset;
+}
+
+    /* Специальные классы для кнопок */
+    .correct {
+        background-color: var(--success-color);
+    }
+
+    .wrong {
+        background-color: var(--danger-color);
+    }
+
+    /* Результаты */
+    #result {
+        font-weight: bold;
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Списки */
+    ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+li {
+    padding: 12px 20px 12px 45px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+li::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-color: #4361ee;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 11.08V12a10 10 0 1 1-5.93-9.14'%3E%3C/path%3E%3Cpolyline points='22 4 12 14.01 9 11.01'%3E%3C/polyline%3E%3C/svg%3E");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: #4361ee;
+}
+
+li:hover {
+    transform: translateX(5px);
+    background: rgba(67, 97, 238, 0.1);
+}
+
+    /* Цитата */
+    blockquote {
+        border-left: 4px solid var(--primary-color);
+        padding: 10px 20px;
+        margin: 20px 0;
+        background-color: rgba(67, 97, 238, 0.05);
+        font-style: italic;
+        border-radius: 0 8px 8px 0;
+    }
+
+    /*аыы*/
+    @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-10px, -10px) rotate(2deg); }
+    100% { transform: translate(10px, 10px) rotate(-2deg); }
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; width: 50%; }
+    50% { opacity: 1; width: 60%; }
+    100% { opacity: 0.8; width: 50%; }
+}
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        body {
+            padding: 15px;
+        }
+        
+        h1 {
+            font-size: 2rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+        }
+        
+        .stage {
+            padding: 20px;
+        }
+    }
+</style>
+    <!-- Добавлен скрипт библиотеки конфетти -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+
+    <h1> Бюджет-Квест: Начало пути</h1>
+    <p>Ты — новый помощник мэра города Финанска. Тебе предстоит пройти путь от сбора предложений до утверждения бюджета.
+    </p>
+
+    <!-- Этап 1 -->
+    <div class="stage">
+        <h2>📍 Этап 1: Сбор предложений от населения</h2>
+        <p>Жители предлагают следующие проекты:</p>
+        <ul>
+            <li>1. Парк с аттракционами и зоопарк (30 млн руб.)</li>
+            <li>2. Аквапарк (20 млн руб.)</li>
+            <li>3. Новая поликлиника и школьное питание (45 млн руб.)</li>
+            <li>4. Салют на день города (15 млн руб.)</li>
+        </ul>
+        <div class="question">
+            <p><strong>Какой проект ты поддержишь?</strong></p>
+            <button onclick="answer1('2')">Выбор 1</button>
+            <button onclick="answer1('4')">Выбор 2</button>
+            <button onclick="answer1('1')">Выбор 3</button>
+            <button onclick="answer1('3')">Выбор 4</button>
+            <div id="result1"></div>
+        </div>
+    </div>
+
+    <!-- Этап 2 -->
+    <div class="stage" id="stage2" style="display:none;">
+        <h2>📍 Этап 2: Формирование проекта бюджета</h2>
+        <p>Доходы города:</p>
+        <ul>
+            <li>Налоги с бизнеса – 25 млн руб.</li>
+            <li>Налоги с граждан – 20 млн руб.</li>
+            <li>Дотации из региона – 15 млн руб.</li>
+        </ul>
+        <p><strong>Всего доходов: 60 млн руб.</strong></p>
+        <p>Вы выбрали проекты №2 (поликлиника) и №4 (питание). Общая стоимость: 45 млн руб.</p>
+        <p>Остаётся 15 млн руб. На что их потратить?</p>
+        <div class="question">
+            <button onclick="answer2('дороги')">На дороги</button>
+            <button onclick="answer2('зелень')">Парки и зелень</button>
+            <button onclick="answer2('резерв')">Резервный фонд</button>
+            <div id="result2"></div>
+        </div>
+    </div>
+
+    <!-- Этап 3 -->
+    <div class="stage" id="stage3" style="display:none;">
+        <h2>📍 Этап 3: Обсуждение бюджета</h2>
+        <p>На общественных слушаниях жители высказали опасения:</p>
+        <blockquote>"Поликлиника слишком дорогостоящая!"<br>"Нужно больше денег на парки!"</blockquote>
+        <div class="question">
+            <p><strong>Как ты ответишь на эти замечания?</strong></p>
+            <button onclick="answer3('1')">Учту мнения</button>
+            <button onclick="answer3('2')">Здравоохранение приоритет</button>
+            <button onclick="answer3('3')">Изменений не будет</button>
+            <div id="result3"></div>
+        </div>
+    </div>
+
+    <!-- Этап 4 -->
+    <div class="stage" id="stage4" style="display:none;">
+        <h2>📍 Этап 4: Голосование за бюджет</h2>
+        <p>Члены городской думы обсуждают твой бюджет:</p>
+        <ul>
+            <li>✅ Депутат А: Поддерживаю</li>
+            <li>❌ Депутат Б: Не хватает средств на дороги</li>
+            <li>✅ Депутат В: Хорошее социальное направление</li>
+        </ul>
+        <div class="question">
+            <p><strong>Как ты поступишь?</strong></p>
+            <button onclick="answer4('1')">Попрошу время на доработку</button>
+            <button onclick="answer4('2')">Буду настаивать на своём</button>
+            <button onclick="answer4('3')">Перераспределю средства</button>
+            <div id="result4"></div>
+        </div>
+    </div>
+
+    <!-- Этап 5 -->
+    <div class="stage" id="stage5" style="display:none;">
+        <h2>📍 Этап 5: Утверждение бюджета</h2>
+        <p>Вы представляете бюджет Главному Бюджетчику города:</p>
+        <p>✔️ Поликлиника построена<br>
+            ✔️ Школьники получают горячее питание<br>
+            ✔️ Ремонт одной центральной дороги начат</p>
+        <h3>🎉 Поздравляем! Вы успешно завершили бюджетный процесс!</h3>
+    </div>
+
+    <script>
+        function answer1(choice) {
+            if (choice === '1') {
+                document.getElementById("result1").innerHTML = "<span style='color:green;'>✅ Хороший выбор! Здоровье и образование важны.</span>";
+            } else {
+                document.getElementById("result1").innerHTML = "<span style='color:red;'>❌ Советуем пересмотреть приоритеты.</span>";
+            }
+            document.getElementById("stage2").style.display = "block";
+        }
+
+        function answer2(choice) {
+            if (choice === 'дороги') {
+                document.getElementById("result2").innerHTML = "<span style='color:green;'>✅ Разумное решение! Город нуждается в инфраструктуре.</span>";
+            } else if (choice === 'зелень') {
+                document.getElementById("result2").innerHTML = "<span style='color:#f1c40f;'>⚠ Можно было бы и на дороги.</span>";
+            } else {
+                document.getElementById("result2").innerHTML = "<span style='color:gray;'>ℹ Интересный стратегический ход.</span>";
+            }
+            document.getElementById("stage3").style.display = "block";
+        }
+
+        function answer3(choice) {
+            if (choice === '1' || choice === '2') {
+                document.getElementById("result3").innerHTML = "<span style='color:green;'>✅ Молодец! Компромисс — основа демократии.</span>";
+            } else {
+                document.getElementById("result3").innerHTML = "<span style='color:red;'>❌ Так вы потеряете доверие.</span>";
+            }
+            document.getElementById("stage4").style.display = "block";
+        }
+
+        function answer4(choice) {
+            if (choice === '3') {
+                document.getElementById("result4").innerHTML = "<span style='color:green;'>✅ Отличный компромисс!</span>";
+                // Автоматически показываем этап 5 при правильном ответе
+                setTimeout(() => {
+                    document.getElementById("stage5").style.display = "block";
+                    // Автоматически запускаем конфетти через 1 секунду
+                    setTimeout(launchConfetti, 1000);
+                }, 500);
+            } else {
+                document.getElementById("result4").innerHTML = "<span style='color:orange;'>⚠ Возможно, это вызовет недовольство.</span>";
+                // Все равно показываем этап 5, но без автоматического конфетти
+                setTimeout(() => {
+                    document.getElementById("stage5").style.display = "block";
+                }, 500);
+            }
+        }
+        function launchConfetti() {
+    // Основной мощный залп
+    confetti({
+        particleCount: 400,
+        spread: 150,
+        startVelocity: 45,
+        origin: { y: 0.6 },
+        colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'],
+        ticks: 500
+    });
+
+    // Несколько дополнительных залпов с небольшими интервалами
+    const delays = [150, 300, 450, 600, 900, 1200];
+    delays.forEach(delay => {
+        setTimeout(() => {
+            confetti({
+                particleCount: 250,
+                spread: 120,
+                startVelocity: 35,
+                origin: { 
+                    x: Math.random() * 0.8 + 0.1,
+                    y: 0.6 
+                },
+                colors: ['#00ffff', '#ff8800', '#8800ff'],
+                ticks: 400
+            });
+        }, delay);
+    });
+
+    // Финальный мега-залп
+    setTimeout(() => {
+        confetti({
+            particleCount: 600,
+            spread: 180,
+            startVelocity: 55,
+            origin: { y: 0.6 },
+            colors: ['#ffffff', '#ffcc00', '#cc00ff'],
+            ticks: 600
+        });
+    }, 1500);
+}
+        
+        
+    </script>
+
+</body>
+
+</html>
