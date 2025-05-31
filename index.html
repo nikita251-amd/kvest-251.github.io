@@ -353,9 +353,9 @@ li:hover {
         <h2>📍 Этап 4: Голосование за бюджет</h2>
         <p>Члены городской думы обсуждают твой бюджет:</p>
         <ul>
-            <li>✅ Депутат А: Поддерживаю</li>
+            <li>✔️ Депутат А: Поддерживаю</li>
             <li>❌ Депутат Б: Не хватает средств на дороги</li>
-            <li>✅ Депутат В: Хорошее социальное направление</li>
+            <li>✔️ Депутат В: Хорошее социальное направление</li>
         </ul>
         <div class="question">
             <p><strong>Как ты поступишь?</strong></p>
@@ -398,7 +398,7 @@ li:hover {
     <script>
         function answer1(choice) {
             if (choice === '1') {
-                document.getElementById("result1").innerHTML = "<span style='color:green;'>✅ Хороший выбор! Здоровье и образование важны.</span>";
+                document.getElementById("result1").innerHTML = "<span style='color:green;'>✔️ Хороший выбор! Здоровье и образование важны.</span>";
             } else {
                 document.getElementById("result1").innerHTML = "<span style='color:red;'>❌ Советуем пересмотреть приоритеты.</span>";
             }
@@ -407,7 +407,7 @@ li:hover {
 
         function answer2(choice) {
             if (choice === 'дороги') {
-                document.getElementById("result2").innerHTML = "<span style='color:green;'>✅ Разумное решение! Город нуждается в инфраструктуре.</span>";
+                document.getElementById("result2").innerHTML = "<span style='color:green;'>✔️ Разумное решение! Город нуждается в инфраструктуре.</span>";
             } else if (choice === 'зелень') {
                 document.getElementById("result2").innerHTML = "<span style='color:#f1c40f;'>⚠ Можно было бы и на дороги.</span>";
             } else {
@@ -418,7 +418,7 @@ li:hover {
 
         function answer3(choice) {
             if (choice === '1' || choice === '2') {
-                document.getElementById("result3").innerHTML = "<span style='color:green;'>✅ Молодец! Компромисс — основа демократии.</span>";
+                document.getElementById("result3").innerHTML = "<span style='color:green;'>✔️ Молодец! Компромисс — основа демократии.</span>";
             } else {
                 document.getElementById("result3").innerHTML = "<span style='color:red;'>❌ Так вы потеряете доверие.</span>";
             }
@@ -427,7 +427,7 @@ li:hover {
 
         function answer4(choice) {
             if (choice === '3') {
-                document.getElementById("result4").innerHTML = "<span style='color:green;'>✅ Отличный компромисс!</span>";
+                document.getElementById("result4").innerHTML = "<span style='color:green;'>✔️ Отличный компромисс!</span>";
                 // Автоматически показываем этап 5 при правильном ответе
                 setTimeout(() => {
                     document.getElementById("stage5").style.display = "block";
