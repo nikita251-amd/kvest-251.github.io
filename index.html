@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Бюджет-Квест: Онлайн-демо</title>
+    <title>Бюджет-Квест: Начало пути</title>
  <style>
     /* Основные глобальные стили */
     :root {
@@ -375,25 +375,13 @@ li:hover {
             <li>✔️ Школьники получают горячее питание</li>
             <li>✔️ Ремонт одной центральной дороги начат</li>
         </ul>
-        <img src="Capy.jpg" alt="капибара" style="width: 300px; height: 520px;">
+        <img src="Capy.jpg" alt="капибара" style="width: 300px;height: 520px;ma;margin-right: 0px;margin-left: 270px;">
         <h3>🎉 Поздравляем! Вы успешно завершили бюджетный процесс!</h3>
         
-        <!-- Добавлена кнопка "Далее" -->
-        <div style="text-align: center; margin-top: 30px;">
-            <button onclick="showStage6()" >
-                Далее ➔
-            </button>
-        </div>
-    </div>
-
-    <!-- Новый Этап 6 -->
-    <div class="stage" id="stage6" style="display:none;">
-        <h2>📍 Этап 6: Вопросик????????????????</h2>
-        <p>                <img src="dela.jpg" alt="как дела??" >
-</p>
-
         
     </div>
+
+    
 
     <script>
         function answer1(choice) {
@@ -442,12 +430,7 @@ li:hover {
                 }, 500);
             }
         }
-        function showStage6() {
-            document.getElementById("stage6").style.display = "block";
-            // Прокрутка к новому этапу
-            document.getElementById("stage6").scrollIntoView({ behavior: 'smooth' });
-           
-        }
+        
 
         function launchConfetti() {
     // Основной мощный залп
